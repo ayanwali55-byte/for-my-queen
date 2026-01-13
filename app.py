@@ -1,83 +1,91 @@
 import streamlit as st
 import time
-from datetime import datetime
+import random
 
-# Page setup
-st.set_page_config(page_title="Special Invite for Bhondu", page_icon="💌")
+# Page Config
+st.set_page_config(page_title="A Night for Us ❤️", page_icon="🌙")
 
-# Initialize session state
+# Custom CSS for a romantic aesthetic
+st.markdown("""
+    <style>
+    .main {
+        background-color: #fff0f3;
+    }
+    .stButton>button {
+        background-color: #ff4d6d;
+        color: white;
+        border-radius: 20px;
+        border: none;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background-color: #c9184a;
+        transform: scale(1.05);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 if 'stage' not in st.session_state:
     st.session_state.stage = 0
 
-def move_to_next():
-    st.session_state.stage += 1
-
-# --- STAGE 0: THE DATE INVITE ---
+# --- STAGE 0: THE TEASE ---
 if st.session_state.stage == 0:
-    st.title("Hey Bhondu! ❤️")
-    st.subheader("I've been thinking... we need more memories together.")
-    st.write("I've planned a little journey for you here. Are you ready?")
-    
-    if st.button("Let's Go! 🚀"):
-        move_to_next()
+    st.title("Hey Mommy... ❤️")
+    st.subheader("I've been thinking about you all day.")
+    st.write("I have a special plan for tonight, but you have to unlock it first.")
+    if st.button("Unlock my heart 🔓"):
+        st.session_state.stage = 1
+        st.rerun()
 
-# --- STAGE 1: PLAN THE DATE ---
+# --- STAGE 1: THE ROMANTIC GAME (SCRATCH CARD) ---
 elif st.session_state.stage == 1:
-    st.title("Step 1: The Plan 🍕")
-    st.write("Pick our next adventure:")
+    st.title("The Mystery Date Game 🎲")
+    st.write("Pick a 'Mystery Card' to see what's in store for us tonight:")
     
-    date_type = st.selectbox("Where are we going?", 
-                             ["Romantic Dinner 🕯️", "Late Night Drive 🚗", "Movie & Popcorn 🍿", "Street Food Crawl 🥘"])
+    col1, col2, col3 = st.columns(3)
     
-    st.write("And what time should I pick you up?")
-    pick_up_time = st.time_input("Select a time", value=datetime.now())
-    
-    if st.button("Lock the Date! ✅"):
-        st.session_state.date_choice = date_type
-        st.session_state.time_choice = pick_up_time.strftime("%I:%M %p")
-        st.success(f"Great! {date_type} at {st.session_state.time_choice} is locked in!")
-        time.sleep(1.5)
-        move_to_next()
+    with col1:
+        if st.button("Card 1 💌"):
+            st.info("A night full of endless cuddles and your favorite movie.")
+    with col2:
+        if st.button("Card 2 🍷"):
+            st.info("Slow dancing in the kitchen with a glass of wine.")
+    with col3:
+        if st.button("Card 3 🔥"):
+            st.info("A very special, long massage followed by 'us' time.")
 
-# --- STAGE 2: THE COUNTDOWN GAME ---
+    st.write("---")
+    if st.button("I want all of them! 😍"):
+        st.session_state.stage = 2
+        st.rerun()
+
+# --- STAGE 2: THE PICK-UP LINE GENERATOR ---
 elif st.session_state.stage == 2:
-    st.title("Step 2: The Excitement Meter ⏳")
-    st.write("How excited are you for this date?")
+    st.title("A Little Something for You... ✨")
     
-    excitement = st.slider("Move the bar to 100%!", 0, 100, 50)
+    lines = [
+        "Are you a magician? Because whenever I look at you, everyone else disappears.",
+        "Your hand looks heavy—can I hold it for you tonight?",
+        "I was going to wait for a star to fall to make a wish, but then I remembered I have you.",
+        "If you were a library book, I’d never return you."
+    ]
     
-    if excitement < 100:
-        st.warning("Higher, Bhondu! Move it to the max! 😤")
-    else:
-        st.success("THAT'S WHAT I LIKE TO SEE!")
-        if st.button("Unlock Final Surprise 🔓"):
-            # A fake countdown for dramatic effect
-            with st.empty():
-                for seconds in range(3, 0, -1):
-                    st.header(f"Loading Love in... {seconds}")
-                    time.sleep(1)
-                st.write("READY!")
-            move_to_next()
+    if st.button("Click for a sweet thought 💭"):
+        st.header(random.choice(lines))
+    
+    if st.button("Final Surprise... 🌹"):
+        st.session_state.stage = 3
+        st.rerun()
 
-# --- STAGE 3: THE PROPOSAL ---
+# --- STAGE 3: THE PROPOSAL & DATE INVITE ---
 elif st.session_state.stage == 3:
     st.balloons()
-    st.title("To my dearest Bhondu... ❤️")
-    st.markdown(f"""
-    So, we have a **{st.session_state.date_choice}** planned for **{st.session_state.time_choice}**. 
-    But there's one more thing I need to ask you...
-    """)
+    st.title("Tonight is all about YOU. ❤️")
+    st.write("I've got the mood set, the snacks ready, and my heart waiting.")
     
-    st.header("Will you be mine forever? 💍")
+    st.subheader("Will you give me the honor of a perfect night together, Bhondu?")
     
-    col_yes, col_no = st.columns(2)
-    
-    with col_yes:
-        if st.button("YES! ❤️"):
-            st.snow()
-            st.header("I love you, Bhondu! 🥰")
-            st.subheader("See you on our date! 🥂")
-            
-    with col_no:
-        if st.button("No (Button broken) 😜"):
-            st.error("This button is for decoration only. Please click the Yes button!")
+    if st.button("YES, I'm all yours! 🥰"):
+        st.snow()
+        st.success("Counting down the minutes until I see you! ❤️🔥")
+        st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHJpbmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6bmZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l4pTdcifPKUYMlV1S/giphy.gif")
